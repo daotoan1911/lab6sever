@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage, limits: {fileSize: 5*1024 }}).single('avatar');
 
-var upload1 = multer({ storage: storage, limits: {fileSize: 5*1024 }}).array('avatar', 5);
+var upload1 = multer({ storage: storage, limits: {fileSize: 2*1000000 }}).array('avatar', 5);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -35,7 +35,19 @@ router.post('/profile', function(req, res ) {
   })
 });
 
-router.post('/profilearray', function(req, res ) {
-  res.render('index', { title: 'Uploads thành công' +'Ktra thư mục uploads' });
+router.post('/profilearray', function (req, res, next) {
+  upload1(req,res,function (err) {
+    if (err){
+      res.render('index', {
+        title: err.message
+      });
+    }else {
+      res.render('index', {
+        title: 'Upload thành công!!!!,' +
+            ' kiểm tra thư mục uploads'
+      });
+    }
+  })
+
 });
 module.exports = router;
